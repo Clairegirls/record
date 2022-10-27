@@ -1,0 +1,21 @@
+{
+  "more": "Más",
+  "collect": "Ocultar",
+  "hdjs": "El derecho de interpretación del evento pertenece a la plataforma",
+  "award": "Ganar",
+  "txk": "Marco: 24 horas",
+  "today": "Hoy",
+  "get": "Recibir",
+  "my_rank": "Mi clasificación：",
+  "act_rule": "Reglas",
+  "r0": "1. Cómo unirse: Enviar regalos de la suerte en habitación de transmisión en vivo;",
+  "r1": "2. Los 20 mejores regalos de la Suerte serán recompensados todos los días sobre la base de la clasificación diaria (UTC + 8). Y los 3 primeros pueden obtener marco durante 24 horas, los ganadores pueden recoger manualmente las recompensas el segundo día;",
+  "r2": "3. Cuando sus puntos son inferiores a 100.000, la recompensa de clasificación diaria será la mitad de la recompensa normal;",
+  "r3": "4. Cada usuario solo puede recibir recompensa por una vez. Si varias cuentas están en la lista al mismo tiempo, la recompensa se emitirá de acuerdo con la clasificación más alta",
+  "coin": "Moneda",
+  "tx": "Marco",
+  "jl": "Recompensas",
+  "success": "Recibido con éxito",
+  "qr":"Confirmar",
+  "at": "Hora del evento: "
+}

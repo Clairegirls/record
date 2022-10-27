@@ -1,0 +1,22 @@
+{
+  "more": "More",
+  "collect": "Hide",
+  "hdjs": "The right of interpretation of the event belongs to the platform",
+  "award": "Win",
+  "txk": "Frame: 24 hours",
+  "today": "Today",
+  "get": "Receive",
+  "my_rank": "My ranking：",
+  "act_rule": "Rules",
+  "r0": "1. How to join: Send lucky gifts in live room;",
+  "r1": "2. The top 20 in Lucky giftswill be rewarded every day based on the daily ranking (UTC+8). And the top 3 can get frame for 24 hours, winners can manually collect the rewards the second day;",
+  "r2": "3. When your points less than 100000, the daily ranking reward will be half of the normal reward;",
+  "r3":"4. Each user can only receive reward once. If multiple accounts are on the list at the same time, the reward will be issued according to the highest ranking",
+  "coin": "Coin",
+  "tx": "Frame",
+  "jl": "Rewards",
+  "success": "Received successfully",
+  "qr":"Confirm",
+  "at": "Event time: "
+}
+

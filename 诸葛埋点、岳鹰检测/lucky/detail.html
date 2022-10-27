@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+<!-- 幸运之王 -->
+  <!-- dns perfetch start -->
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="dns-prefetch" href="//api.immelo.com">
+  <!-- dns perfetch end -->
+
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <link rel="stylesheet" type="text/css" href="../common/css/reset.css?v=202210262334"/>
+  <link rel="stylesheet" type="text/css" href="./main.css?v=202210262334"/>
+  <script>
+    var htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
+    // 获取html的dom
+    var htmlDom = document.getElementsByTagName('html')[0];
+    // 设置html的font-size
+    htmlDom.style.fontSize = htmlWidth / 10 + 'px';
+    window.addEventListener('resize', (e) => {
+      var htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      htmlDom.style.fontSize = htmlWidth / 10 + 'px';
+    });
+  </script>
+  <script src="../common/js/yueying.js?_t=20220725"></script>
+  <script src="../common/js/zhuge.js?_t=20220916"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+  <!-- 头部 -->
+  <div class="head_wrap">
+    <div class="status_bar bg"></div>
+    <div class="header_bg bg">
+      <button class="return_icon bg" @click="jump2native('call_back', '')"></button>
+      <button class="rule_icon bg" @click="openRuleModal"></button>
+    </div>
+  </div>
+  <!-- 主图部分 -->
+  <div class="main_content bg" :style="'background-image: url('+'img/'+lang+'1.png'+')'">
+    <div class="time_box">
+      <div class="act-time" :class="lang">{{dataJson.at}}{{start_time_format}} ~ {{end_time_format}}</div>
+      <ul class="time_num">
+        <li v-for="i in time">{{i}}</li>
+      </ul>
+    </div>
+    <div class="time_type">（UTC+8）</div>
+    <div class="reward_box_bg bg">
+      <!-- 金币 -->
+      <div class="reward_item">
+        <div class="reward_tit bg">{{dataJson.coin}}·{{dataJson.jl}}</div>
+        <div class="coins_bg bg">
+          <div class="coin_num" v-for="gold_item in gold_reward.items">
+            <div class="coin_item">
+              <img class="coin_img" src="img/coin.png"/>
+              <div>{{gold_item.award}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="coin_tip">
+          <div class="coin_tip_item bg" v-for="award_tip in gold_reward.award_tips">
+            <div class="coin_label">{{award_tip.label}}</div>
+            <div class="coin_award">
+              <img class="coin_img" src="img/coin.png"/>
+              <div>{{award_tip.award}}</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- 头像框 -->
+      <div class="reward_item"></div>
+      <div class="reward_tit bg">{{dataJson.tx}}·{{dataJson.jl}}</div>
+      <div class="headers_bg bg">
+        <!-- <div class="coin_num" v-for="head_item in head_reward.items">
+          <div class="coin_item">
+            <img class="appface" src="gold_item.appface"/>
+          </div>
+        </div> -->
+      </div>
+      <div class="time_effect">
+        {{dataJson.txk}}
+      </div>
+    </div>
+  </div>
+  <div class="rank_box_bg">
+    <!-- 今日排行 -->
+    <div class="rank_box"  v-if="todayRank.length!=0">
+      <div class="rank_header_bg bg">
+        <div class="rank_tit">{{dataJson.today}}</div>
+        <div class="headers"></div>
+        <div class="rank_con">
+          <div class="header_con" v-for="(three,index) in  threeRank(todayRank)">
+            <div class="header_ware bg" :style="'background-image: url(img/'+ index +'.png)'">
+              <div class="header_icon_bg bg"  :style="'background-image: url('+ checkWebp(three.appface) +')'">
+                <div v-if="three.sex==2" :class="'grade'+index" :style="'background-image: url('+'img/ml/'+girlCharm(three.level)+'.png'+')'"><div>{{three.level}}</div></div>
+                <div v-else :class="'grade'+index" :style="'background-image: url('+'img/nl/'+boyEnergy(three.level)+'.png'+')'"><div>{{three.level}}</div></div>
+
+              </div>
+              <div class="info_box">
+                <div class="user_info">
+                  <div class="three_info_name">{{three.nickname}}</div>
+                  <img class="user_flag" :src="three.flag" alt="">
+                </div>
+                <div class="reward_info">
+                  <div>{{dataJson.award}}</div>
+                  <img class="user_coin" src="img/coin.png" alt="">
+                  <div>{{getCoin(three.value,three.value_format)}}</div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rank_center_bg" id="rank_center_bg" ref="element">
+        <div class="rank_item"  v-for="(todItem,index) in todayRankShow" v-show="todItem.rank>3">
+          <div class="rank_left">
+            <div class="user_rank">
+              {{getRank(todItem.rank)}}
+            </div>
+            <div class="rank_info">
+              <img class="appface" :src="checkWebp(todItem.appface)" alt="">
+              <div class="">
+                <div class="user_name">
+                  <div class="">{{todItem.nickname}}</div>
+                  <img class="user_flag" :src="todItem.flag" alt="">
+                </div>
+                <div v-if="todItem.sex==2" class="user_level" :style="'background-image: url('+'img/ml/'+girlCharm(todItem.level)+'.png'+')'"><div class="level_num">{{todItem.level}}</div></div>
+                <div v-else class="user_level" :style="'background-image: url('+'img/nl/'+boyEnergy(todItem.level)+'.png'+')'"><div class="level_num">{{todItem.level}}</div></div>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="rank_right">
+              <div>{{dataJson.award}}</div>
+              <img class="rank_coin" src="img/coin.png" alt="">
+              <div>{{getCoin(todItem.value,todItem.value_format)}}</div>
+          </div>
+        </div>
+      </div>
+      <div @click="todaySwitchMore(todayRank,'text666','img666')" class="rank_bottom_bg bg">
+        <template v-if="todayRank.length>10">
+          <div id='text666'>{{dataJson.more}}</div>
+          <img id="img666" src="img/more.png" alt="">
+        </template>
+
+      </div>
+    </div>
+    <!-- 历史排行 -->
+    <div v-if="historyRank.length!=0&&history" class="rank_box" v-for="(history,historyIndex) in historyRank">
+      <div class="rank_header_bg bg">
+        <div class="rank_tit">{{history.title}}</div>
+        <div class="headers"></div>
+        <div class="rank_con" v-if="history.items.length!=0">
+          <div class="header_con" v-for="(three,index) in threeRank(history.items)">
+            <div class="header_ware bg" :style="'background-image: url(img/'+ index +'.png)'">
+              <div class="header_icon_bg bg"  :style="'background-image: url('+ checkWebp(three.appface) +')'">
+                <div v-if="three.sex==2" :class="'grade'+index" :style="'background-image: url('+'img/ml/'+girlCharm(three.level)+'.png'+')'"><div>{{three.level}}</div></div>
+                <div v-else :class="'grade'+index" :style="'background-image: url('+'img/nl/'+boyEnergy(three.level)+'.png'+')'"><div>{{three.level}}</div></div>
+
+              </div>
+              <div class="info_box">
+                <div class="user_info">
+                  <div class="three_info_name">{{three.nickname}}</div>
+                  <img class="user_flag" :src="three.flag" alt="">
+                </div>
+                <div class="reward_info">
+                  <div>{{dataJson.award}}</div>
+                  <img class="user_coin" src="img/coin.png" alt="">
+                  <div>{{getCoin(three.value,three.value_format)}}</div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="rank_center_bg his_center_bg" :id="'rank_center_bg'+historyIndex" :ref="'element'+historyIndex">
+        <div class="rank_item"  v-for="(hisItem,index) in history.now_items" v-if="hisItem.rank>3">
+          <div class="rank_left">
+            <div class="user_rank">
+              {{getRank(hisItem.rank)}}
+            </div>
+            <div class="rank_info">
+              <img class="appface" :src="checkWebp(hisItem.appface)" alt="">
+              <div class="">
+                <div class="user_name">
+                  <div class="">{{hisItem.nickname}}</div>
+                  <img class="user_flag" :src="hisItem.flag" alt="">
+                </div>
+                <div v-if="hisItem.sex==2" class="user_level" :style="'background-image: url('+'img/ml/'+girlCharm(hisItem.level)+'.png'+')'"><div class="level_num">{{hisItem.level}}</div></div>
+                <div v-else class="user_level" :style="'background-image: url('+'img/nl/'+boyEnergy(hisItem.level)+'.png'+')'"><div class="level_num">{{hisItem.level}}</div></div>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="rank_right">
+              <div>{{dataJson.award}}</div>
+              <img class="rank_coin" src="img/coin.png" alt="">
+              <div>{{getCoin(hisItem.value,hisItem.value_format)}}</div>
+          </div>
+        </div>
+      </div>
+      <div @click="historySwitchMore(historyRank,historyIndex,'text'+historyIndex,'img'+historyIndex)" class="rank_bottom_bg bg">
+        <template v-if="history.items.length>8">
+          <div :id="'text'+historyIndex">{{dataJson.more}}</div>
+          <img :id="'img'+historyIndex" src="img/more.png" alt="">
+        </template>
+      </div>
+
+    </div>
+  </div>
+  <!-- 我的排行 -->
+    <div class="my_box bg">
+      <div class="my_left">
+        <img class="my_appface" :src="myRank.my_appface" alt="">
+        <div>
+          <div class="my_ranking">{{dataJson.my_rank}}{{(myRank.my_rank>99||myRank.my_rank==0)?'99+':myRank.my_rank}}</div>
+          <div class="my_get_coin">
+            <div>{{dataJson.award}}</div>
+            <img class="my_coin" src="img/coin.png" alt="">
+            <div class="value">{{myRank.my_value}}</div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="my_right">
+        <div class="get_box" v-if="myRank.award_status==1">
+        <!-- <div class="get_box"> -->
+
+          <div class="add_coin">
+            <img class="my_coin" src="img/coin.png" alt="">
+            <div class="my_coin_num">+{{myRank.award}}</div>
+          </div>
+          <img v-if="myRank.head_reward.hasOwnProperty('img')" :src="myRank.head_reward.img" alt="" class="award_img">
+          <button v-if="myRank.btn_status==0" class="gray_btn">{{dataJson.get}}</button>
+          <button v-else class="get_reward bg" @click="getReward">{{dataJson.get}}</button>
+        </div>
+        <button v-else class="gray_btn">{{dataJson.get}}</button>
+
+      </div>
+    </div>
+    <div class="rule_box" id="rule_box">
+      <div class="rule_con">
+        <div class="rule_bg bg">
+          <div class="rule_tit">{{dataJson.act_rule}}</div>
+          <div style="overflow:hidden;">
+            <ul class="rule_text">
+              <li>{{dataJson.r0}}</li>
+              <li>{{dataJson.r1}}</li>
+              <li>{{dataJson.r2}}</li>
+              <li>{{dataJson.r3}}</li>
+            </ul>
+          </div>
+        </div>
+        <img @click="closeRuleModal" class="close_img" src="img/close.png" alt="">
+      </div>
+    </div>
+    <div class="feed_frame" v-if="framebox">
+      <div class="feed_frame_cont">
+          <p>{{dataJson.success}}</p>
+          <div class="feed_f_btn" @click="framebox=false">
+            {{dataJson.qr}}
+          </div>
+      </div>
+  </div>
+</div>
+
+</body>
+<script src="../common/js/jquery.min.js"></script>
+<script src="../common/js/vue.min.js"></script>
+<script src="../library/constants.js?v=1.0.0" type="text/javascript"></script>
+<script src="../library/util.js?v=202210262334" type="text/javascript"></script>
+<script src="main.js?v=202210262334"></script>
+</html>
+
